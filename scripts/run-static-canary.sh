@@ -6,7 +6,9 @@
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "SCRIPT_DIR $SCRIPT_DIR"
 GINKGO_TEST_BUILD="$SCRIPT_DIR/../test/build"
+echo "GINKGO_TEST_BUILD $GINKGO_TEST_BUILD"
 # TEST_IMAGE_REGISTRY is the registry in test-infra-* accounts where e2e test images are stored
 TEST_IMAGE_REGISTRY=${TEST_IMAGE_REGISTRY:-"617930562442.dkr.ecr.us-west-2.amazonaws.com"}
 
@@ -21,6 +23,8 @@ source "$SCRIPT_DIR"/lib/canary.sh
 function run_ginkgo_test() {
   local focus=$1
   echo "Running ginkgo tests with focus: $focus"
+  echo "ls GINKGO_TEST_BUILD"
+  ls $GINKGO_TEST_BUILD
 
   (CGO_ENABLED=0 ginkgo $EXTRA_GINKGO_FLAGS --no-color --focus="$focus" -v --timeout 10m --fail-on-pending $GINKGO_TEST_BUILD/az-traffic.test -- \
       --cluster-kubeconfig="$KUBECONFIG" \
